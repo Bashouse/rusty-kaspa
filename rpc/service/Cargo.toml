@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-rpc-service"
-description = "Kaspa RPC service"
+name = "bascoin-rpc-service"
+description = "Bascoin RPC service"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,25 +10,24 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-addresses.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-notify.workspace = true
-kaspa-consensusmanager.workspace = true
-kaspa-core.workspace = true
-kaspa-hashes.workspace = true
-kaspa-index-core.workspace = true
-kaspa-math.workspace = true
-kaspa-mining.workspace = true
-kaspa-notify.workspace = true
-kaspa-p2p-flows.workspace = true
-kaspa-p2p-lib.workspace = true
-kaspa-p2p-mining.workspace = true
-kaspa-perf-monitor.workspace = true
-kaspa-rpc-core.workspace = true
-kaspa-txscript.workspace = true
-kaspa-utils.workspace = true
-kaspa-utils-tower.workspace = true
-kaspa-utxoindex.workspace = true
+bascoin-addresses.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-notify.workspace = true
+bascoin-consensusmanager.workspace = true
+bascoin-core.workspace = true
+bascoin-hashes.workspace = true
+bascoin-index-core.workspace = true
+bascoin-math.workspace = true
+bascoin-mining.workspace = true
+bascoin-notify.workspace = true
+bascoin-p2p-flows.workspace = true
+bascoin-p2p-lib.workspace = true
+bascoin-p2p-mining.workspace = true
+bascoin-txscript = { path = "../../crypto/txscript" }
+bascoin-txscript-errors = { path = "../../crypto/txscript/errors" }
+bascoin-utils.workspace = true
+bascoin-utils-tower.workspace = true
+bascoin-utxoindex.workspace = true
 
 async-trait.workspace = true
 log.workspace = true

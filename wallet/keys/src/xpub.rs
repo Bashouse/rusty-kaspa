@@ -2,7 +2,7 @@
 //! Extended public key ([`XPub`]).
 //!
 
-use kaspa_bip32::{ChainCode, KeyFingerprint, Prefix};
+use bascoin_bip32::{ChainCode, KeyFingerprint, Prefix};
 use std::{fmt, str::FromStr};
 
 use crate::imports::*;
@@ -13,7 +13,7 @@ use crate::imports::*;
 /// This class allows accepts another XPub and and provides
 /// functions for derivation of dependent child public keys.
 ///
-/// Please note that Kaspa extended public keys use `kpub` prefix.
+/// Please note that Bascoin extended public keys use `bpub` prefix.
 ///
 /// @see {@link PrivateKeyGenerator}, {@link PublicKeyGenerator}, {@link XPrv}, {@link Mnemonic}
 /// @category Wallet SDK
@@ -67,7 +67,7 @@ impl XPub {
 
     #[wasm_bindgen(getter)]
     pub fn xpub(&self) -> Result<String> {
-        let str = self.inner.to_extended_key("kpub".try_into()?).to_string();
+        let str = self.inner.to_extended_key("bpub".try_into()?).to_string();
         Ok(str)
     }
 

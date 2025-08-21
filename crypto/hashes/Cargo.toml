@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-hashes"
-description = "Kaspa hashing functions"
+name = "bascoin-hashes"
+description = "Bascoin hashing functions"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -15,9 +15,10 @@ no-asm = ["keccak"]
 [dependencies]
 blake2b_simd.workspace = true
 borsh.workspace = true
+derive_more.workspace = true
 faster-hex.workspace = true
 js-sys.workspace = true
-kaspa-utils.workspace = true
+bascoin-utils.workspace = true
 keccak = { workspace = true, optional = true }
 once_cell.workspace = true
 serde.workspace = true

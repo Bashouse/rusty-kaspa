@@ -4,7 +4,7 @@ pub mod consensus {
     //!
 
     use crate::KType;
-    use kaspa_math::Uint256;
+    use bascoin_math::Uint256;
 
     //
     // ~~~~~~~~~~~~~~~~~~~~~~~~~ Network & Ghostdag ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -174,7 +174,7 @@ pub mod perf {
 #[cfg(test)]
 mod tests {
     use super::consensus::{MAX_DIFFICULTY_TARGET, MAX_DIFFICULTY_TARGET_AS_F64};
-    use kaspa_math::Uint256;
+    use bascoin_math::Uint256;
 
     #[test]
     fn test_difficulty_max_consts() {

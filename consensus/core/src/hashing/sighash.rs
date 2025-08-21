@@ -1,5 +1,5 @@
 use arc_swap::ArcSwapOption;
-use kaspa_hashes::{Hash, Hasher, HasherBase, TransactionSigningHash, TransactionSigningHashECDSA, ZERO_HASH};
+use bascoin_hashes::{Hash, Hasher, HasherBase, TransactionSigningHash, TransactionSigningHashECDSA, ZERO_HASH};
 use std::cell::Cell;
 use std::sync::Arc;
 

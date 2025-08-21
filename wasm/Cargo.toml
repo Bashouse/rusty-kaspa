@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-wasm"
-description = "KASPA WASM bindings"
+name = "bascoin-wasm"
+description = "BASCOIN WASM bindings"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -17,21 +17,21 @@ crate-type = ["cdylib"]
 [dependencies]
 cfg-if.workspace = true
 js-sys.workspace = true
-kaspa-addresses.workspace = true
-kaspa-bip32.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-wasm.workspace = true
-kaspa-core.workspace = true
-kaspa-math.workspace = true
-kaspa-pow.workspace = true
-kaspa-txscript.workspace = true
-kaspa-rpc-core.workspace = true
-kaspa-utils.workspace = true
-kaspa-wasm-core.workspace = true
-kaspa-wallet-core.workspace = true
-kaspa-wallet-keys.workspace = true
-kaspa-wrpc-client.workspace = true
-kaspa-wrpc-wasm.workspace = true
+bascoin-addresses.workspace = true
+bascoin-bip32.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-wasm.workspace = true
+bascoin-core.workspace = true
+bascoin-math.workspace = true
+bascoin-pow.workspace = true
+bascoin-txscript.workspace = true
+bascoin-rpc-core.workspace = true
+bascoin-utils.workspace = true
+bascoin-wasm-core.workspace = true
+bascoin-wallet-core.workspace = true
+bascoin-wallet-keys.workspace = true
+bascoin-wrpc-client.workspace = true
+bascoin-wrpc-wasm.workspace = true
 num.workspace = true
 wasm-bindgen.workspace = true
 workflow-log.workspace = true
@@ -40,20 +40,20 @@ workflow-wasm.workspace = true
 
 [features]
 wasm32-sdk = [
-    "kaspa-wallet-core/wasm32-sdk",
-    "kaspa-pow/wasm32-sdk",
-    "kaspa-txscript/wasm32-sdk",
+    "bascoin-wallet-core/wasm32-sdk",
+    "bascoin-pow/wasm32-sdk",
+    "bascoin-txscript/wasm32-sdk",
 ]
 wasm32-core = [
-    "kaspa-wallet-core/wasm32-core",
-    "kaspa-pow/wasm32-sdk",
-    "kaspa-txscript/wasm32-sdk",
+    "bascoin-wallet-core/wasm32-core",
+    "bascoin-pow/wasm32-sdk",
+    "bascoin-txscript/wasm32-sdk",
 ]
 wasm32-rpc = [
-    "kaspa-consensus-core/wasm32-sdk",
-    "kaspa-consensus-wasm/wasm32-sdk",
-    "kaspa-wrpc-client/wasm32-sdk",
-    "kaspa-wrpc-wasm/wasm32-sdk",
+    "bascoin-consensus-core/wasm32-sdk",
+    "bascoin-consensus-wasm/wasm32-sdk",
+    "bascoin-wrpc-client/wasm32-sdk",
+    "bascoin-wrpc-wasm/wasm32-sdk",
 ]
 wasm32-keygen = []
 default = []
@@ -63,8 +63,8 @@ targets = ["wasm32-unknown-unknown"]
 
 [package.metadata.emanate.wasm]
 targets = [
-    { target = "nodejs", out-dir = "nodejs/kaspa" },
-    { target = "web", out-dir = "web/kaspa" },
+    { target = "nodejs", out-dir = "nodejs/bascoin" },
+    { target = "web", out-dir = "web/bascoin" },
 ]
 folder = "setup"
 

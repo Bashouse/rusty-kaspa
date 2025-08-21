@@ -1,0 +1,15 @@
+[package]
+name = "krippy-genesis-miner"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bascoin-consensus-core = { path = "../../consensus/core" }
+bascoin-hashes = { path = "../../crypto/hashes" }
+bascoin-utils = { path = "../../utils" }
+bascoin-core = { path = "../../core" }
+bascoin-math = { path = "../../math" }
+
+# For logging (optional, but good practice)
+log = "0.4"
+env_logger = "0.11"

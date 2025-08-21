@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-consensus-notify"
-description = "Kaspa consensus notifier"
+name = "bascoin-consensus-notify"
+description = "Bascoin consensus notifier"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -14,11 +14,11 @@ async-channel.workspace = true
 cfg-if.workspace = true
 derive_more.workspace = true
 futures.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-core.workspace = true
-kaspa-hashes.workspace = true
-kaspa-notify.workspace = true
-kaspa-utils.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-core.workspace = true
+bascoin-hashes.workspace = true
+bascoin-notify.workspace = true
+bascoin-utils.workspace = true
 log.workspace = true
 paste.workspace = true
 thiserror.workspace = true

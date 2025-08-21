@@ -7,7 +7,7 @@ use super::{
 use crate::Result;
 use crate::{Error, KEY_SIZE};
 use borsh::{BorshDeserialize, BorshSerialize};
-use kaspa_utils::hex::*;
+use bascoin_utils::hex::{FromHex, ToHex};
 use rand_core::{CryptoRng, RngCore};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -103,7 +103,7 @@ impl Mnemonic {
     #[wasm_bindgen(js_name = toSeed)]
     pub fn create_seed(&self, password: Option<String>) -> String {
         let password = password.unwrap_or_default();
-        self.to_seed(password.as_str()).as_bytes().to_vec().to_hex()
+        self.to_seed(password.as_str()).as_bytes().as_slice().to_hex()
     }
 }
 
@@ -234,6 +234,10 @@ impl Mnemonic {
         let mut seed = [0u8; Seed::SIZE];
         pbkdf2::pbkdf2::<Hmac<Sha512>>(self.phrase.as_bytes(), salt.as_bytes(), PBKDF2_ROUNDS, &mut seed).unwrap();
         Seed(seed)
+    }
+
+    pub fn to_seed_hex(&self, password: &str) -> String {
+        self.to_seed(password).as_bytes().as_slice().to_hex()
     }
 }
 

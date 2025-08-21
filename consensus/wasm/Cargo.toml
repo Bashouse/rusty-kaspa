@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-consensus-wasm"
-description = "Kaspa consensus core WASM bindings"
+name = "bascoin-consensus-wasm"
+description = "Bascoin consensus core WASM bindings"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -14,12 +14,12 @@ wasm32-sdk = []
 wasm32-types = []
 
 [dependencies]
-kaspa-consensus-core.workspace = true
-kaspa-consensus-client.workspace = true
-kaspa-addresses.workspace = true
-kaspa-txscript.workspace = true
-kaspa-hashes.workspace = true
-kaspa-utils.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-client.workspace = true
+bascoin-addresses.workspace = true
+bascoin-txscript.workspace = true
+bascoin-hashes.workspace = true
+bascoin-utils.workspace = true
 
 cfg-if.workspace = true
 faster-hex.workspace = true

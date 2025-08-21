@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-consensus"
-description = "Kaspa consensus library"
+name = "bascoin-consensus"
+description = "Bascoin consensus library"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -18,21 +18,21 @@ faster-hex.workspace = true
 futures-util.workspace = true
 indexmap.workspace = true
 itertools.workspace = true
-kaspa-addresses.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-notify.workspace = true
-kaspa-consensusmanager.workspace = true
-kaspa-core.workspace = true
-kaspa-database.workspace = true
-kaspa-hashes.workspace = true
-kaspa-math.workspace = true
-kaspa-merkle.workspace = true
-kaspa-muhash.workspace = true
-kaspa-notify.workspace = true
-kaspa-pow.workspace = true
-kaspa-txscript.workspace = true
-kaspa-txscript-errors.workspace = true
-kaspa-utils.workspace = true
+bascoin-addresses.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-notify.workspace = true
+bascoin-consensusmanager.workspace = true
+bascoin-core.workspace = true
+bascoin-database.workspace = true
+bascoin-hashes.workspace = true
+bascoin-math.workspace = true
+bascoin-merkle.workspace = true
+bascoin-muhash.workspace = true
+bascoin-notify.workspace = true
+bascoin-pow.workspace = true
+bascoin-txscript.workspace = true
+bascoin-txscript-errors.workspace = true
+bascoin-utils.workspace = true
 log.workspace = true
 once_cell.workspace = true
 parking_lot.workspace = true
@@ -54,8 +54,8 @@ criterion.workspace = true
 serde_json.workspace = true
 flate2.workspace = true
 rand_distr.workspace = true
-kaspa-txscript-errors.workspace = true
-kaspa-addresses.workspace = true
+bascoin-txscript-errors.workspace = true
+bascoin-addresses.workspace = true
 
 [[bench]]
 name = "parallel_muhash"
@@ -67,7 +67,7 @@ harness = false
 
 [features]
 html_reports = []
-devnet-prealloc = ["kaspa-consensus-core/devnet-prealloc"]
+devnet-prealloc = ["bascoin-consensus-core/devnet-prealloc"]
 
 [lints]
 workspace = true

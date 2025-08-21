@@ -1,5 +1,5 @@
 [package]
-name = "kaspa-testing-integration"
+name = "bascoin-testing-integration"
 publish = false
 rust-version.workspace = true
 version.workspace = true
@@ -10,33 +10,33 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-alloc.workspace = true            # This changes the global allocator for all of the next dependencies so should be kept first
+bascoin-alloc.workspace = true            # This changes the global allocator for all of the next dependencies so should be kept first
 
-kaspa-addresses.workspace = true
-kaspa-bip32.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-notify.workspace = true
-kaspa-consensus.workspace = true
-kaspa-consensusmanager.workspace = true
-kaspa-core.workspace = true
-kaspa-database.workspace = true
-kaspa-grpc-client.workspace = true
-kaspa-grpc-core.workspace = true
-kaspa-grpc-server.workspace = true
-kaspa-hashes.workspace = true
-kaspa-index-processor.workspace = true
-kaspa-math.workspace = true
-kaspa-merkle.workspace = true
-kaspa-muhash.workspace = true
-kaspa-notify.workspace = true
-kaspa-pow.workspace = true
-kaspa-rpc-core.workspace = true
-kaspa-rpc-service.workspace = true
-kaspa-txscript.workspace = true
-kaspa-utils.workspace = true
-kaspa-utxoindex.workspace = true
-kaspa-wrpc-server.workspace = true
-kaspad.workspace = true
+bascoin-addresses.workspace = true
+bascoin-bip32.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-notify.workspace = true
+bascoin-consensus.workspace = true
+bascoin-consensusmanager.workspace = true
+bascoin-core.workspace = true
+bascoin-database.workspace = true
+bascoin-grpc-client.workspace = true
+bascoin-grpc-core.workspace = true
+bascoin-grpc-server.workspace = true
+bascoin-hashes.workspace = true
+bascoin-index-processor.workspace = true
+bascoin-math.workspace = true
+bascoin-merkle.workspace = true
+bascoin-muhash.workspace = true
+bascoin-notify.workspace = true
+bascoin-pow.workspace = true
+bascoin-rpc-core.workspace = true
+bascoin-rpc-service.workspace = true
+bascoin-txscript.workspace = true
+bascoin-utils.workspace = true
+bascoin-utxoindex.workspace = true
+bascoin-wrpc-server.workspace = true
+bascoind.workspace = true
 
 async-channel.workspace = true
 async-trait.workspace = true
@@ -69,12 +69,12 @@ workflow-perf-monitor.workspace = true
 criterion.workspace = true
 rand = { workspace = true, features = ["small_rng"] }
 tokio = { workspace = true, features = ["rt", "macros", "process"] }
-kaspa-txscript-errors.workspace = true
+bascoin-txscript-errors.workspace = true
 
 [features]
 heap = ["dhat"]
 html_reports = []
-devnet-prealloc = ["kaspad/devnet-prealloc"]
+devnet-prealloc = ["bascoind/devnet-prealloc"]
 
 [lints]
 workspace = true

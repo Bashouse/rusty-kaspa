@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-p2p-mining"
-description = "Kaspa p2p mining"
+name = "bascoin-p2p-mining"
+description = "Bascoin p2p mining"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,15 +10,15 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-core.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensusmanager.workspace = true
-kaspa-mining-errors.workspace = true
-kaspa-hashes.workspace = true
-kaspa-math.workspace = true
-kaspa-p2p-lib.workspace = true
-kaspa-utils.workspace = true
-kaspa-utils-tower.workspace = true
+bascoin-core.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensusmanager.workspace = true
+bascoin-mining-errors.workspace = true
+bascoin-hashes.workspace = true
+bascoin-math.workspace = true
+bascoin-p2p-lib.workspace = true
+bascoin-utils.workspace = true
+bascoin-utils-tower.workspace = true
 log.workspace = true
 tokio.workspace = true
 

@@ -16,7 +16,7 @@ pub struct Output {
     /// The script for this output, also known as the scriptPubKey.
     pub script_public_key: ScriptPublicKey,
     #[builder(setter(strip_option))]
-    #[serde(with = "kaspa_utils::serde_bytes_optional")]
+    #[serde(with = "bascoin_utils::serde_bytes_optional")]
     /// The redeem script for this output.
     pub redeem_script: Option<Vec<u8>>,
     /// A map from public keys needed to spend this output to their

@@ -1,7 +1,5 @@
-use kaspa_consensus_core::{
-    errors::tx::TxRuleError,
-    tx::{TransactionId, TransactionOutpoint},
-};
+use bascoin_consensus_core::errors::tx::TxRuleError;
+use bascoin_consensus_core::tx::{TransactionId, TransactionOutpoint};
 use thiserror::Error;
 
 #[derive(Error, Debug, Clone, PartialEq, Eq)]
@@ -97,6 +95,76 @@ impl From<TxRuleError> for RuleError {
 }
 
 pub type RuleResult<T> = std::result::Result<T, RuleError>;
+
+#[derive(Error, Debug, Clone)]
+pub enum MempoolError {
+    #[error("The transaction has already been accepted to the DAG: {0}")]
+    RejectAlreadyAccepted(TransactionId),
+    #[error("The transaction is a duplicate of a transaction already in the mempool: {0}")]
+    RejectDuplicate(TransactionId),
+    #[error("The transaction {1} attempts to spend the same outpoint {0} that is already spent by a transaction in the mempool")]
+    RejectDoubleSpendInMempool(TransactionOutpoint, TransactionId),
+    #[error("replace by fee found no double spending transaction in the mempool")]
+    RejectRbfNoDoubleSpend,
+    #[error("replace by fee found more than one double spending transaction in the mempool")]
+    RejectRbfTooManyDoubleSpendingTransactions,
+    /// a transaction is rejected if the mempool is full
+    #[error("transaction could not be added to the mempool because it's full with transactions with higher priority")]
+    RejectMempoolIsFull,
+    /// An error emitted by mining\src\mempool\check_transaction_standard.rs
+    #[error("Transaction {0} is not standard: {1}")]
+    RejectNonStandard(TransactionId, String),
+    #[error("one of the transaction inputs spends an immature UTXO: {0}")]
+    RejectImmatureSpend(TxRuleError),
+    #[error("Missing transaction {0}")]
+    RejectMissingTransaction(TransactionId),
+    #[error("orphan transaction size of {0} bytes is larger than max allowed size of {1} bytes")]
+    RejectBadOrphanMass(u64, u64),
+    #[error("Rejecting orphan {0} that is already in the orphan pool")]
+    RejectDuplicateOrphan(TransactionId),
+    #[error("Rejecting orphan {0} that attempts to spend the same outpoint as orphan {1}")]
+    RejectDoubleSpendOrphan(TransactionId, TransactionId),
+    #[error("Rejecting orphan {0} that is not allowed to enter the orphan pool")]
+    RejectDisallowedOrphan(TransactionId),
+    #[error("Missing orphan outpoint: index {0} transaction {1} outpoint {2}")]
+    RejectMissingOrphanOutpoint(usize, TransactionId, TransactionOutpoint),
+    #[error("Missing orphan transaction {0}")]
+    RejectMissingOrphanTransaction(TransactionId),
+    /// New behavior: a transaction is rejected if the orphan pool is full
+    #[error("number of high-priority transactions in orphan pool ({0}) has reached the maximum allowed ({1})")]
+    RejectOrphanPoolIsFull(usize, u64),
+    #[error("transactions in mempool form a cycle")]
+    RejectCycleInMempoolTransactions,
+    // TODO: This error is added for the tx_relay flow but is never constructed neither in the golang nor in this version. Discuss if it can be removed.
+    #[error("Transaction {0} is invalid")]
+    RejectInvalid(TransactionId),
+    #[error("Transaction {0} storage mass is incomputable")]
+    RejectStorageMassIncomputable(TransactionId),
+    #[error("Transaction {0} version is not supported: {1}, max supported: {2}, {3}")]
+    RejectVersion(TransactionId, u16, u16, u16),
+    #[error("Transaction {0} compute mass is too high: {1}, max allowed: {2}")]
+    RejectComputeMass(TransactionId, u64, u64),
+    #[error("Transaction {0} transient mass is too high: {1}, max allowed: {2}")]
+    RejectTransientMass(TransactionId, u64, u64),
+    #[error("Transaction {0} storage mass is too high: {1}, max allowed: {2}")]
+    RejectStorageMass(TransactionId, u64, u64),
+    #[error("Transaction {0} signature script size is too high: {1}, max allowed: {2}, {3}")]
+    RejectSignatureScriptSize(TransactionId, usize, u64, u64),
+    #[error("Transaction {0} script public key version is not supported in output index {1}")]
+    RejectScriptPublicKeyVersion(TransactionId, usize),
+    #[error("Transaction {0} output index {1} has an unsupported script class")]
+    RejectOutputScriptClass(TransactionId, usize),
+    #[error("Transaction {0} output index {1} has dust value {2}")]
+    RejectDust(TransactionId, usize, u64),
+    #[error("Transaction {0} input index {1} has an unsupported script class")]
+    RejectInputScriptClass(TransactionId, usize),
+    #[error("Transaction {0} fee {1} is too low, minimum is {2}")]
+    RejectInsufficientFee(TransactionId, u64, u64),
+    #[error("Transaction {0} has too many signature operations: {1}, max allowed: {2}, {3}")]
+    RejectSignatureCount(TransactionId, usize, u64, u8),
+    #[error(transparent)]
+    RuleError(#[from] TxRuleError),
+}
 
 #[derive(Error, Debug, Clone, PartialEq, Eq)]
 pub enum NonStandardError {

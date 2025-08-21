@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-wrpc-wasm"
-description = "Kaspa wRPC WASM client"
+name = "bascoin-wrpc-wasm"
+description = "Bascoin wRPC WASM client"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,7 +10,7 @@ license.workspace = true
 repository.workspace = true
 
 [features]
-wasm32-sdk = ["kaspa-wrpc-client/wasm32-sdk"]
+wasm32-sdk = ["bascoin-wrpc-client/wasm32-sdk"]
 default = []
 
 [lib]
@@ -20,15 +20,15 @@ crate-type = ["cdylib", "lib"]
 ahash.workspace = true
 async-std.workspace = true
 cfg-if.workspace = true
-kaspa-addresses.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-client.workspace = true
-kaspa-consensus-wasm.workspace = true
-kaspa-notify.workspace = true
-kaspa-wrpc-client.workspace = true
-kaspa-rpc-core.workspace = true
-kaspa-rpc-macros.workspace = true
-kaspa-wasm-core.workspace = true
+bascoin-addresses.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-client.workspace = true
+bascoin-consensus-wasm.workspace = true
+bascoin-notify.workspace = true
+bascoin-wrpc-client.workspace = true
+bascoin-rpc-core.workspace = true
+bascoin-rpc-macros.workspace = true
+bascoin-wasm-core.workspace = true
 serde_json.workspace = true
 serde-wasm-bindgen.workspace = true
 serde.workspace = true

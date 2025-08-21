@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-index-processor"
-description = "Kaspa index processor"
+name = "bascoin-index-processor"
+description = "Bascoin index processor"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,16 +10,16 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-consensus-core.workspace = true
-kaspa-consensus-notify.workspace = true
-kaspa-consensusmanager.workspace = true
-kaspa-core.workspace = true
-kaspa-database.workspace = true
-kaspa-hashes.workspace = true
-kaspa-index-core.workspace = true
-kaspa-notify.workspace = true
-kaspa-utils.workspace = true
-kaspa-utxoindex.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-notify.workspace = true
+bascoin-consensusmanager.workspace = true
+bascoin-core.workspace = true
+bascoin-database.workspace = true
+bascoin-hashes.workspace = true
+bascoin-index-core.workspace = true
+bascoin-notify.workspace = true
+bascoin-utils.workspace = true
+bascoin-utxoindex.workspace = true
 
 async-channel.workspace = true
 async-trait.workspace = true
@@ -32,7 +32,7 @@ tokio = { workspace = true, features = [ "rt-multi-thread", "macros", "signal" ]
 triggered.workspace = true
 
 [dev-dependencies]
-kaspa-consensus.workspace = true
+bascoin-consensus.workspace = true
 parking_lot.workspace = true
 tokio = { workspace = true, features = ["rt", "macros"] }
 rand = {workspace = true,  features = [ "small_rng" ]}

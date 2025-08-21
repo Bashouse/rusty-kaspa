@@ -1,7 +1,7 @@
 use crate::{hashing, BlueWorkType};
 use borsh::{BorshDeserialize, BorshSerialize};
-use kaspa_hashes::Hash;
-use kaspa_utils::mem_size::MemSizeEstimator;
+use bascoin_hashes::Hash;
+use bascoin_utils::mem_size::MemSizeEstimator;
 use serde::{Deserialize, Serialize};
 
 /// @category Consensus

@@ -1,15 +1,15 @@
 pub use super::{
     bps::{Bps, TenBps},
     constants::consensus::*,
-    genesis::{GenesisBlock, DEVNET_GENESIS, GENESIS, SIMNET_GENESIS, TESTNET11_GENESIS, TESTNET_GENESIS},
+    genesis::{GenesisBlock, DEVNET_GENESIS, GENESIS, SIMNET_GENESIS, TESTNET11_GENESIS, TESTNET_GENESIS, KRIPPY_GENESIS, NIPPY_GENESIS, BIERO_GENESIS},
 };
 use crate::{
     constants::STORAGE_MASS_PARAMETER,
     network::{NetworkId, NetworkType},
     BlockLevel, KType,
 };
-use kaspa_addresses::Prefix;
-use kaspa_math::Uint256;
+use bascoin_addresses::Prefix;
+use bascoin_math::Uint256;
 use std::cmp::min;
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -448,6 +448,10 @@ impl From<NetworkType> for Params {
             NetworkType::Testnet => TESTNET_PARAMS,
             NetworkType::Devnet => DEVNET_PARAMS,
             NetworkType::Simnet => SIMNET_PARAMS,
+            NetworkType::Testnet11 => TESTNET11_PARAMS,
+            NetworkType::Krippy => KRIPPY_PARAMS,
+            NetworkType::Nippy => NIPPY_PARAMS,
+            NetworkType::Biero => BIERO_PARAMS,
         }
     }
 }
@@ -459,10 +463,14 @@ impl From<NetworkId> for Params {
             NetworkType::Testnet => match value.suffix {
                 Some(10) => TESTNET_PARAMS,
                 Some(x) => panic!("Testnet suffix {} is not supported", x),
-                None => panic!("Testnet suffix not provided"),
+                None => TESTNET11_PARAMS, // Default to Testnet11 if no suffix is provided for Testnet
             },
             NetworkType::Devnet => DEVNET_PARAMS,
             NetworkType::Simnet => SIMNET_PARAMS,
+            NetworkType::Testnet11 => TESTNET11_PARAMS,
+            NetworkType::Krippy => KRIPPY_PARAMS,
+            NetworkType::Nippy => NIPPY_PARAMS,
+            NetworkType::Biero => BIERO_PARAMS,
         }
     }
 }
@@ -470,23 +478,25 @@ impl From<NetworkId> for Params {
 pub const MAINNET_PARAMS: Params = Params {
     dns_seeders: &[
         // This DNS seeder is run by Denis Mashkevich
-        "mainnet-dnsseed-1.kaspanet.org",
+        "mainnet-dnsseed-1.bascoinnet.org",
         // This DNS seeder is run by Denis Mashkevich
-        "mainnet-dnsseed-2.kaspanet.org",
+        "mainnet-dnsseed-2.bascoinnet.org",
         // This DNS seeder is run by Georges Künzli
-        "seeder1.kaspad.net",
+        "seeder1.bascoind.net",
         // This DNS seeder is run by Georges Künzli
-        "seeder2.kaspad.net",
+        "seeder2.bascoind.net",
         // This DNS seeder is run by Georges Künzli
-        "seeder3.kaspad.net",
+        "seeder3.bascoind.net",
         // This DNS seeder is run by Georges Künzli
-        "seeder4.kaspad.net",
+        "seeder4.bascoind.net",
         // This DNS seeder is run by Tim
-        "kaspadns.kaspacalc.net",
+        "bascoindns.bascoincaic.net",
         // This DNS seeder is run by supertypo
-        "n-mainnet.kaspa.ws",
+        "n-mainnet.bascoin.ws",
         // This DNS seeder is run by -gerri-
-        "dnsseeder-kaspa-mainnet.x-con.at",
+        "dnsseeder-bascoin-mainnet.x-con.at",
+        "149.210.191.219",
+        "85.10.148.195",
     ],
     net: NetworkId::new(NetworkType::Mainnet),
     genesis: GENESIS,
@@ -505,9 +515,6 @@ pub const MAINNET_PARAMS: Params = Params {
     coinbase_payload_script_public_key_max_len: 150,
     max_coinbase_payload_len: 204,
 
-    // This is technically a soft fork from the Go implementation since kaspad's consensus doesn't
-    // check these rules, but in practice it's enforced by the network layer that limits the message
-    // size to 1 GB.
     // These values should be lowered to more reasonable amounts on the next planned HF/SF.
     prior_max_tx_inputs: 1_000_000_000,
     prior_max_tx_outputs: 1_000_000_000,
@@ -525,7 +532,6 @@ pub const MAINNET_PARAMS: Params = Params {
     // switches to the deflationary period. This number is calculated as follows:
     // We define a year as 365.25 days
     // Half a year in seconds = 365.25 / 2 * 24 * 60 * 60 = 15778800
-    // The network was down for three days shortly after launch
     // Three days in seconds = 3 * 24 * 60 * 60 = 259200
     deflationary_phase_daa_score: 15778800 - 259200,
     pre_deflationary_phase_base_subsidy: 50000000000,
@@ -542,11 +548,11 @@ pub const MAINNET_PARAMS: Params = Params {
 pub const TESTNET_PARAMS: Params = Params {
     dns_seeders: &[
         // This DNS seeder is run by Tiram
-        "seeder1-testnet.kaspad.net",
+        "seeder1-testnet.bascoind.net",
         // This DNS seeder is run by -gerri-
-        "dnsseeder-kaspa-testnet.x-con.at",
+        "dnsseeder-bascoin-testnet.x-con.at",
         // This DNS seeder is run by supertypo
-        "n-testnet-10.kaspa.ws",
+        "n-testnet-10.bascoin.ws",
     ],
     net: NetworkId::with_suffix(NetworkType::Testnet, 10),
     genesis: TESTNET_GENESIS,
@@ -565,10 +571,6 @@ pub const TESTNET_PARAMS: Params = Params {
     coinbase_payload_script_public_key_max_len: 150,
     max_coinbase_payload_len: 204,
 
-    // This is technically a soft fork from the Go implementation since kaspad's consensus doesn't
-    // check these rules, but in practice it's enforced by the network layer that limits the message
-    // size to 1 GB.
-    // These values should be lowered to more reasonable amounts on the next planned HF/SF.
     prior_max_tx_inputs: 1_000_000_000,
     prior_max_tx_outputs: 1_000_000_000,
     prior_max_signature_script_len: 1_000_000_000,
@@ -666,10 +668,6 @@ pub const DEVNET_PARAMS: Params = Params {
     coinbase_payload_script_public_key_max_len: 150,
     max_coinbase_payload_len: 204,
 
-    // This is technically a soft fork from the Go implementation since kaspad's consensus doesn't
-    // check these rules, but in practice it's enforced by the network layer that limits the message
-    // size to 1 GB.
-    // These values should be lowered to more reasonable amounts on the next planned HF/SF.
     prior_max_tx_inputs: 1_000_000_000,
     prior_max_tx_outputs: 1_000_000_000,
     prior_max_signature_script_len: 1_000_000_000,
@@ -697,5 +695,89 @@ pub const DEVNET_PARAMS: Params = Params {
 
     crescendo: CRESCENDO,
     // TODO: Set this to always after the fork
+    crescendo_activation: ForkActivation::never(),
+};
+
+pub const NIPPY_PARAMS: Params = Params {
+    dns_seeders: &[], // Placeholder for Nippy DNS seeders
+    net: NetworkId::new(NetworkType::Testnet),
+    genesis: NIPPY_GENESIS,
+    prior_ghostdag_k: LEGACY_DEFAULT_GHOSTDAG_K,
+    timestamp_deviation_tolerance: TIMESTAMP_DEVIATION_TOLERANCE,
+    prior_target_time_per_block: 1000,
+    max_difficulty_target: MAX_DIFFICULTY_TARGET,
+    max_difficulty_target_f64: MAX_DIFFICULTY_TARGET_AS_F64,
+    prior_difficulty_window_size: LEGACY_DIFFICULTY_WINDOW_SIZE,
+    min_difficulty_window_size: MIN_DIFFICULTY_WINDOW_SIZE,
+    prior_max_block_parents: 10,
+    prior_mergeset_size_limit: (LEGACY_DEFAULT_GHOSTDAG_K as u64) * 10,
+    prior_merge_depth: 3600,
+    prior_finality_depth: 86400,
+    prior_pruning_depth: 185798,
+    coinbase_payload_script_public_key_max_len: 150,
+    max_coinbase_payload_len: 204,
+
+    prior_max_tx_inputs: 1_000_000_000,
+    prior_max_tx_outputs: 1_000_000_000,
+    prior_max_signature_script_len: 1_000_000_000,
+    prior_max_script_public_key_len: 1_000_000_000,
+
+    mass_per_tx_byte: 1,
+    mass_per_script_pub_key_byte: 10,
+    mass_per_sig_op: 1000,
+    max_block_mass: 500_000,
+
+    storage_mass_parameter: STORAGE_MASS_PARAMETER,
+
+    deflationary_phase_daa_score: 15778800 - 259200,
+    pre_deflationary_phase_base_subsidy: 50000000000,
+    prior_coinbase_maturity: 100,
+    skip_proof_of_work: false,
+    max_block_level: 250,
+    pruning_proof_m: 1000,
+
+    crescendo: CRESCENDO,
+    crescendo_activation: ForkActivation::never(),
+};
+
+pub const BIERO_PARAMS: Params = Params {
+    dns_seeders: &[], // Placeholder for Biero DNS seeders
+    net: NetworkId::new(NetworkType::Devnet),
+    genesis: BIERO_GENESIS,
+    prior_ghostdag_k: LEGACY_DEFAULT_GHOSTDAG_K,
+    timestamp_deviation_tolerance: TIMESTAMP_DEVIATION_TOLERANCE,
+    prior_target_time_per_block: 1000,
+    max_difficulty_target: MAX_DIFFICULTY_TARGET,
+    max_difficulty_target_f64: MAX_DIFFICULTY_TARGET_AS_F64,
+    prior_difficulty_window_size: LEGACY_DIFFICULTY_WINDOW_SIZE,
+    min_difficulty_window_size: MIN_DIFFICULTY_WINDOW_SIZE,
+    prior_max_block_parents: 10,
+    prior_mergeset_size_limit: (LEGACY_DEFAULT_GHOSTDAG_K as u64) * 10,
+    prior_merge_depth: 3600,
+    prior_finality_depth: 86400,
+    prior_pruning_depth: 185798,
+    coinbase_payload_script_public_key_max_len: 150,
+    max_coinbase_payload_len: 204,
+
+    prior_max_tx_inputs: 1_000_000_000,
+    prior_max_tx_outputs: 1_000_000_000,
+    prior_max_signature_script_len: 1_000_000_000,
+    prior_max_script_public_key_len: 1_000_000_000,
+
+    mass_per_tx_byte: 1,
+    mass_per_script_pub_key_byte: 10,
+    mass_per_sig_op: 1000,
+    max_block_mass: 500_000,
+
+    storage_mass_parameter: STORAGE_MASS_PARAMETER,
+
+    deflationary_phase_daa_score: 15778800 - 259200,
+    pre_deflationary_phase_base_subsidy: 50000000000,
+    prior_coinbase_maturity: 100,
+    skip_proof_of_work: false,
+    max_block_level: 250,
+    pruning_proof_m: 1000,
+
+    crescendo: CRESCENDO,
     crescendo_activation: ForkActivation::never(),
 };

@@ -3,12 +3,13 @@ use crate::{
     script_builder::{ScriptBuilder, ScriptBuilderResult},
     script_class::ScriptClass,
 };
-use blake2b_simd::Params;
-use kaspa_addresses::{Address, Prefix, Version};
-use kaspa_consensus_core::tx::{ScriptPublicKey, ScriptVec};
-use kaspa_txscript_errors::TxScriptError;
-use smallvec::SmallVec;
+use bascoin_addresses::{Address, Prefix, Version};
+use bascoin_consensus_core::tx::{ScriptPublicKey, ScriptVec, Transaction};
+use bascoin_txscript_errors::TxScriptError;
 use std::iter::once;
+use blake2b_simd::Params;
+use crate::opcodes::codes::OpTrue;
+use std::sync::Arc;
 
 mod multisig;
 
@@ -18,14 +19,14 @@ pub use multisig::{multisig_redeem_script, multisig_redeem_script_ecdsa, Error a
 fn pay_to_pub_key(address_payload: &[u8]) -> ScriptVec {
     // TODO: use ScriptBuilder when add_op and add_data fns or equivalents are available
     assert_eq!(address_payload.len(), 32);
-    SmallVec::from_iter(once(OpData32).chain(address_payload.iter().copied()).chain(once(OpCheckSig)))
+    once(OpData32).chain(address_payload.iter().copied()).chain(once(OpCheckSig)).collect()
 }
 
 /// Creates a new script to pay a transaction output to a 33-byte ECDSA pubkey.
 fn pay_to_pub_key_ecdsa(address_payload: &[u8]) -> ScriptVec {
     // TODO: use ScriptBuilder when add_op and add_data fns or equivalents are available
     assert_eq!(address_payload.len(), 33);
-    SmallVec::from_iter(once(OpData33).chain(address_payload.iter().copied()).chain(once(OpCheckSigECDSA)))
+    once(OpData33).chain(address_payload.iter().copied()).chain(once(OpCheckSigECDSA)).collect()
 }
 
 /// Creates a new script to pay a transaction output to a script hash.
@@ -33,7 +34,7 @@ fn pay_to_pub_key_ecdsa(address_payload: &[u8]) -> ScriptVec {
 fn pay_to_script_hash(script_hash: &[u8]) -> ScriptVec {
     // TODO: use ScriptBuilder when add_op and add_data fns or equivalents are available
     assert_eq!(script_hash.len(), 32);
-    SmallVec::from_iter([OpBlake2b, OpData32].iter().copied().chain(script_hash.iter().copied()).chain(once(OpEqual)))
+    [OpBlake2b, OpData32].iter().copied().chain(script_hash.iter().copied()).chain(once(OpEqual)).collect()
 }
 
 /// Creates a new script to pay a transaction output to the specified address.
@@ -85,12 +86,10 @@ pub fn extract_script_pub_key_address(script_public_key: &ScriptPublicKey, prefi
 
 pub mod test_helpers {
     use super::*;
-    use crate::{opcodes::codes::OpTrue, MAX_TX_IN_SEQUENCE_NUM};
-    use kaspa_consensus_core::{
-        constants::TX_VERSION,
-        subnets::SUBNETWORK_ID_NATIVE,
-        tx::{Transaction, TransactionInput, TransactionOutpoint, TransactionOutput},
-    };
+    use bascoin_consensus_core::{self};
+    use bascoin_consensus_core::tx::{MutableTransaction, ScriptPublicKey};
+    use bascoin_consensus_core::constants::{MAX_TX_IN_SEQUENCE_NUM, TX_VERSION};
+    use bascoin_consensus_core::subnets::SUBNETWORK_ID_NATIVE;
 
     /// Returns a P2SH script paying to an anyone-can-spend address,
     /// The second return value is a redeemScript to be used with txscript.pay_to_script_hash_signature_script
@@ -103,13 +102,13 @@ pub mod test_helpers {
     /// Creates a transaction that spends the first output of provided transaction.
     /// Assumes that the output being spent has opTrueScript as its scriptPublicKey.
     /// Creates the value of the spent output minus provided `fee` (in sompi).
-    pub fn create_transaction(tx_to_spend: &Transaction, fee: u64) -> Transaction {
+    pub fn create_transaction(tx_to_spend: &MutableTransaction<Transaction>, fee: u64) -> Arc<MutableTransaction<Transaction>> {
         let (script_public_key, redeem_script) = op_true_script();
         let signature_script = pay_to_script_hash_signature_script(redeem_script, vec![]).expect("the script is canonical");
-        let previous_outpoint = TransactionOutpoint::new(tx_to_spend.id(), 0);
-        let input = TransactionInput::new(previous_outpoint, signature_script, MAX_TX_IN_SEQUENCE_NUM, 1);
-        let output = TransactionOutput::new(tx_to_spend.outputs[0].value - fee, script_public_key);
-        Transaction::new(TX_VERSION, vec![input], vec![output], 0, SUBNETWORK_ID_NATIVE, 0, vec![])
+        let previous_outpoint = bascoin_consensus_core::tx::TransactionOutpoint::new(tx_to_spend.id(), 0);
+        let input = bascoin_consensus_core::tx::TransactionInput::new(previous_outpoint, signature_script, MAX_TX_IN_SEQUENCE_NUM, 1);
+        let output = bascoin_consensus_core::tx::TransactionOutput::new(tx_to_spend.tx.outputs[0].value - fee, script_public_key);
+        Arc::new(MutableTransaction::new(Transaction::new(TX_VERSION, vec![input], vec![output], 0, SUBNETWORK_ID_NATIVE, 0, vec![])))
     }
 
     /// Creates a transaction that spends the outputs of specified indexes (if they exist) of every provided transaction and returns an optional change.
@@ -120,32 +119,32 @@ pub mod test_helpers {
     ///
     /// If no change is provided, creates only one output with the value of the spent outputs minus and `fee` (in sompi)
     pub fn create_transaction_with_change<'a>(
-        txs_to_spend: impl Iterator<Item = &'a Transaction>,
+        txs_to_spend: impl Iterator<Item = &'a MutableTransaction<Transaction>>,
         output_indexes: Vec<usize>,
         change: Option<u64>,
         fee: u64,
-    ) -> Transaction {
+    ) -> Arc<MutableTransaction<Transaction>> {
         let (script_public_key, redeem_script) = op_true_script();
         let signature_script = pay_to_script_hash_signature_script(redeem_script, vec![]).expect("the script is canonical");
         let mut inputs_value: u64 = 0;
         let mut inputs = vec![];
         for tx_to_spend in txs_to_spend {
             for i in output_indexes.iter().copied() {
-                if i < tx_to_spend.outputs.len() {
-                    let previous_outpoint = TransactionOutpoint::new(tx_to_spend.id(), i as u32);
-                    inputs.push(TransactionInput::new(previous_outpoint, signature_script.clone(), MAX_TX_IN_SEQUENCE_NUM, 1));
-                    inputs_value += tx_to_spend.outputs[i].value;
+                if i < tx_to_spend.tx.outputs.len() {
+                    let previous_outpoint = bascoin_consensus_core::tx::TransactionOutpoint::new(tx_to_spend.id(), i as u32);
+                    inputs.push(bascoin_consensus_core::tx::TransactionInput::new(previous_outpoint, signature_script.clone(), MAX_TX_IN_SEQUENCE_NUM, 1));
+                    inputs_value += tx_to_spend.tx.outputs[i].value;
                 }
             }
         }
         let outputs = match change {
             Some(change) => vec![
-                TransactionOutput::new(inputs_value - fee - change, script_public_key.clone()),
-                TransactionOutput::new(change, script_public_key),
+                bascoin_consensus_core::tx::TransactionOutput::new(inputs_value - fee - change, script_public_key.clone()),
+                bascoin_consensus_core::tx::TransactionOutput::new(change, script_public_key),
             ],
-            None => vec![TransactionOutput::new(inputs_value - fee, script_public_key.clone())],
+            None => vec![bascoin_consensus_core::tx::TransactionOutput::new(inputs_value - fee, script_public_key.clone())],
         };
-        Transaction::new(TX_VERSION, inputs, outputs, 0, SUBNETWORK_ID_NATIVE, 0, vec![])
+        Arc::new(MutableTransaction::new(Transaction::new(TX_VERSION, inputs, outputs, 0, SUBNETWORK_ID_NATIVE, 0, vec![])))
     }
 }
 
@@ -173,7 +172,7 @@ mod tests {
                     ),
                 ),
                 prefix: Prefix::Mainnet,
-                expected_address: Ok("kaspa:qpauqsvk7yf9unexwmxsnmg547mhyga37csh0kj53q6xxgl24ydxjsgzthw5j".try_into().unwrap()),
+                expected_address: Ok("bascoin:qpauqsvk7yf9unexwmxsnmg547mhyga37csh0kj53q6xxgl24ydxjsgzthw5j".try_into().unwrap()),
             },
             Test {
                 name: "Testnet PubKeyECDSA script and address",
@@ -184,7 +183,7 @@ mod tests {
                     ),
                 ),
                 prefix: Prefix::Testnet,
-                expected_address: Ok("kaspatest:qxaqrlzlf6wes72en3568khahq66wf27tuhfxn5nytkd8tcep2c0vrse6gdmpks".try_into().unwrap()),
+                expected_address: Ok("bascointest:qxaqrlzlf6wes72en3568khahq66wf27tuhfxn5nytkd8tcep2c0vrse6gdmpks".try_into().unwrap()),
             },
             Test {
                 name: "Testnet non standard script",

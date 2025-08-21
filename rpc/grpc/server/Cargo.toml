@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-grpc-server"
-description = "Kaspa gRPC server"
+name = "bascoin-grpc-server"
+description = "Bascoin gRPC server"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,15 +10,15 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-consensus-core.workspace = true
-kaspa-core.workspace = true
-kaspa-grpc-core.workspace = true
-kaspa-notify.workspace = true
-kaspa-rpc-core.workspace = true
-kaspa-rpc-macros.workspace = true
-kaspa-rpc-service.workspace = true
-kaspa-utils-tower.workspace = true
-kaspa-utils.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-core.workspace = true
+bascoin-grpc-core.workspace = true
+bascoin-notify.workspace = true
+bascoin-rpc-core.workspace = true
+bascoin-rpc-macros.workspace = true
+bascoin-rpc-service.workspace = true
+bascoin-utils-tower.workspace = true
+bascoin-utils.workspace = true
 
 async-channel.workspace = true
 async-stream.workspace = true
@@ -42,7 +42,7 @@ uuid.workspace = true
 rustls.workspace = true
 
 [dev-dependencies]
-kaspa-grpc-client.workspace = true
+bascoin-grpc-client.workspace = true
 
 [lints]
 workspace = true

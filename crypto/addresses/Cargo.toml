@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-addresses"
-description = "Kaspa address"
+name = "bascoin-addresses"
+description = "Bascoin address"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true

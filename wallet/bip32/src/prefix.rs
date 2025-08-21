@@ -4,9 +4,9 @@ use crate::{Error, ExtendedKey, Result, Version};
 use borsh::{BorshDeserialize, BorshSerialize};
 use core::{
     fmt::{self, Debug, Display},
-    str,
+    str::{self, FromStr},
 };
-use kaspa_consensus_core::network::{NetworkId, NetworkType};
+use bascoin_consensus_core::network::{NetworkId, NetworkType};
 
 /// BIP32 extended key prefixes a.k.a. "versions" (e.g. `xpub`, `xprv`)
 ///
@@ -183,22 +183,6 @@ impl From<&Prefix> for Version {
     }
 }
 
-impl TryFrom<Version> for Prefix {
-    type Error = Error;
-
-    fn try_from(version: Version) -> Result<Self> {
-        Self::from_version(version)
-    }
-}
-
-impl TryFrom<&[u8]> for Prefix {
-    type Error = Error;
-
-    fn try_from(bytes: &[u8]) -> Result<Prefix> {
-        Self::from_bytes(bytes.try_into()?)
-    }
-}
-
 /// Debugging formatting helper for [`Version`] with a `Debug` impl that
 /// outputs hexadecimal instead of base 10.
 struct DebugVersion(Version);
@@ -209,9 +193,9 @@ impl Debug for DebugVersion {
     }
 }
 
-impl TryFrom<&str> for Prefix {
-    type Error = Error;
-    fn try_from(value: &str) -> std::result::Result<Self, Self::Error> {
+impl FromStr for Prefix {
+    type Err = Error;
+    fn from_str(value: &str) -> std::result::Result<Self, Self::Err> {
         match value {
             "kprv" => Ok(Prefix::KPRV),
             "kpub" => Ok(Prefix::KPUB),

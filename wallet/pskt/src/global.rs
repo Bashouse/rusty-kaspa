@@ -112,7 +112,7 @@ impl Default for Global {
     fn default() -> Self {
         Global {
             version: Version::Zero,
-            tx_version: kaspa_consensus_core::constants::TX_VERSION,
+            tx_version: bascoin_consensus_core::constants::TX_VERSION,
             fallback_lock_time: None,
             inputs_modifiable: false,
             outputs_modifiable: false,

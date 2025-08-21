@@ -1,21 +1,21 @@
 /*!
-# Rusty Kaspa WASM32 bindings
+# Rusty Bascoin WASM32 bindings
 
-[<img alt="github" src="https://img.shields.io/badge/github-kaspanet/rusty--kaspa-8da0cb?style=for-the-badge&labelColor=555555&color=8da0cb&logo=github" height="20">](https://github.com/kaspanet/rusty-kaspa/tree/master/wasm)
-[<img alt="crates.io" src="https://img.shields.io/crates/v/kaspa-wasm.svg?maxAge=2592000&style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/kaspa-wasm)
-[<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-kaspa--wasm-56c2a5?maxAge=2592000&style=for-the-badge&logo=docs.rs" height="20">](https://docs.rs/kaspa-wasm)
-<img alt="license" src="https://img.shields.io/crates/l/kaspa-wasm.svg?maxAge=2592000&color=6ac&style=for-the-badge&logoColor=fff" height="20">
+[<img alt="github" src="https://img.shields.io/badge/github-bascoinnet/rusty--bascoin-8da0cb?style=for-the-badge&labelColor=555555&color=8da0cb&logo=github" height="20">](https://github.com/bascoinnet/rusty-bascoin/tree/master/wasm)
+[<img alt="crates.io" src="https://img.shields.io/crates/v/bascoin-wasm.svg?maxAge=2592000&style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/bascoin-wasm)
+[<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-bascoin--wasm-56c2a5?maxAge=2592000&style=for-the-badge&logo=docs.rs" height="20">](https://docs.rs/bascoin-wasm)
+<img alt="license" src="https://img.shields.io/crates/l/bascoin-wasm.svg?maxAge=2592000&color=6ac&style=for-the-badge&logoColor=fff" height="20">
 
 <br>
 
-Rusty-Kaspa WASM32 bindings offer direct integration of Rust code and Rusty-Kaspa
+Rusty-Bascoin WASM32 bindings offer direct integration of Rust code and Rusty-Bascoin
 codebase within JavaScript environments such as Node.js and Web Browsers.
 
 ## Documentation
 
-- [**Integrating with Kaspa** guide](https://kaspa.aspectron.org/)
-- [Rust SDK documentation (**Rustdoc**)](https://docs.rs/kaspa-wasm/)
-- [TypeScript documentation (**JSDoc**)](https://kaspa.aspectron.org/docs/)
+- [**Integrating with Bascoin** guide](https://bascoin.aspectron.org/)
+- [Rust SDK documentation (**Rustdoc**)](https://docs.rs/bascoin-wasm/)
+- [TypeScript documentation (**JSDoc**)](https://bascoin.aspectron.org/docs/)
 
 Please note that while WASM directly binds JavaScript and Rust resources, their names on JavaScript side
 are different from their name in Rust as they conform to the 'camelCase' convention in JavaScript and
@@ -26,7 +26,7 @@ to the 'snake_case' convention in Rust.
 The APIs are currently separated into the following groups (this will be expanded in the future):
 
 - **Consensus Client API** — Bindings for primitives related to transactions.
-- **RPC API** — [RPC interface bindings](kaspa_wrpc_wasm::client) for the Kaspa node using WebSocket (wRPC) connections.
+- **RPC API** — [RPC interface bindings](bascoin_wrpc_wasm::client) for the Bascoin node using WebSocket (wRPC) connections.
 - **Wallet SDK** — API for async core wallet processing tasks.
 - **Wallet API** — A rust implementation of the fully-featured wallet usable in the native Rust, Browser or NodeJs and Bun environments.
 
@@ -35,13 +35,13 @@ The APIs are currently separated into the following groups (this will be expande
 For JavaScript / TypeScript environments, there are two
 available NPM modules:
 
-- <https://www.npmjs.com/package/kaspa>
-- <https://www.npmjs.com/package/kaspa-wasm>
+- <https://www.npmjs.com/package/bascoin>
+- <https://www.npmjs.com/package/bascoin-wasm>
 
-The `kaspa-wasm` module is a pure WASM32 module that includes
+The `bascoin-wasm` module is a pure WASM32 module that includes
 the entire wallet framework, but does not support RPC due to an absence
 of a native WebSocket in NodeJs environment, while
-the `kaspa` module includes `websocket` package dependency simulating
+the `bascoin` module includes `websocket` package dependency simulating
 the W3C WebSocket and due to this supports RPC.
 
 NOTE: for security reasons it is always recommended to build WASM SDK from source or
@@ -50,20 +50,20 @@ download pre-built redistributables from releases or development builds.
 ## Examples
 
 JavaScript examples for using this framework can be found at:
-<https://github.com/kaspanet/rusty-kaspa/tree/master/wasm/nodejs>
+<https://github.com/bascoinnet/rusty-bascoin/tree/master/wasm/nodejs>
 
 ## WASM32 Binaries
 
 For pre-built browser-compatible WASM32 redistributables of this
-framework please see the releases section of the Rusty Kaspa
-repository at <https://github.com/kaspanet/rusty-kaspa/releases>.
+framework please see the releases section of the Rusty Bascoin
+repository at <https://github.com/bascoinnet/rusty-bascoin/releases>.
 
 ## Development Builds
 
-The latest development builds from <https://kaspa.aspectron.org/nightly/downloads/>.
+The latest development builds from <https://bascoin.aspectron.org/nightly/downloads/>.
 Development builds typically contain fixes and improvements that are not yet available in
 stable releases. Additional information can be found at
-<https://aspectron.org/en/projects/kaspa-wasm.html>.
+<https://aspectron.org/en/projects/bascoin-wasm.html>.
 
 ## Using RPC
 
@@ -76,7 +76,7 @@ in the NodeJS environment, you need to introduce a global W3C WebSocket
 object before loading the WASM32 library (to simulate the browser behavior).
 You can the [WebSocket](https://www.npmjs.com/package/websocket)
 module that offers W3C WebSocket compatibility and is compatible
-with Kaspa RPC implementation.
+with Bascoin RPC implementation.
 
 You can use the following shims:
 
@@ -91,9 +91,9 @@ globalThis.WebSocket = require('websocket').w3cwebsocket;
 <html>
     <head>
         <script type="module">
-            import * as kaspa_wasm from './kaspa/kaspa-wasm.js';
+            import * as bascoin_wasm from './bascoin/bascoin-wasm.js';
             (async () => {
-                const kaspa = await kaspa_wasm.default('./kaspa/kaspa-wasm_bg.wasm');
+                const bascoin = await bascoin_wasm.default('./bascoin/bascoin-wasm_bg.wasm');
                 // ...
             })();
         </script>
@@ -106,11 +106,11 @@ globalThis.WebSocket = require('websocket').w3cwebsocket;
 
 ```javascript
 // W3C WebSocket module shim
-// this is provided by NPM `kaspa` module and is only needed
+// this is provided by NPM `bascoin` module and is only needed
 // if you are building WASM libraries for NodeJS from source
 // globalThis.WebSocket = require('websocket').w3cwebsocket;
 
-let {RpcClient,Encoding,initConsolePanicHook} = require('./kaspa-rpc');
+let {RpcClient,Encoding,initConsolePanicHook} = require('./bascoin-rpc');
 
 // enabling console panic hooks allows WASM to print panic details to console
 // initConsolePanicHook();
@@ -138,7 +138,7 @@ const rpc = new RpcClient({
 })();
 ```
 
-For more details, please follow the [**Integrating with Kaspa**](https://kaspa.aspectron.org/) guide.
+For more details, please follow the [**Integrating with Bascoin**](https://bascoin.aspectron.org/) guide.
 
 */
 
@@ -148,7 +148,7 @@ For more details, please follow the [**Integrating with Kaspa**](https://kaspa.a
     any(feature = "wasm32-sdk", feature = "wasm32-rpc", feature = "wasm32-core", feature = "wasm32-keygen"),
     not(target_arch = "wasm32")
 ))]
-compile_error!("`kaspa-wasm` crate for WASM32 target must be built with `--features wasm32-sdk|wasm32-rpc|wasm32-core|wasm32-keygen`");
+compile_error!("`bascoin-wasm` crate for WASM32 target must be built with `--features wasm32-sdk|wasm32-rpc|wasm32-core|wasm32-keygen`");
 
 mod version;
 pub use version::*;
@@ -157,76 +157,76 @@ cfg_if::cfg_if! {
 
     if #[cfg(feature = "wasm32-sdk")] {
 
-        pub use kaspa_addresses::{Address, Version as AddressVersion};
-        pub use kaspa_consensus_core::tx::{ScriptPublicKey, Transaction, TransactionInput, TransactionOutpoint, TransactionOutput};
-        pub use kaspa_pow::wasm::*;
-        pub use kaspa_txscript::wasm::*;
+        pub use bascoin_addresses::{Address, Version as AddressVersion};
+        pub use bascoin_consensus_core::tx::{ScriptPublicKey, Transaction, TransactionInput, TransactionOutpoint, TransactionOutput};
+        pub use bascoin_pow::wasm::*;
+        pub use bascoin_txscript::wasm::*;
 
         pub mod rpc {
-            //! Kaspa RPC interface
+            //! Bascoin RPC interface
             //!
 
             pub mod messages {
-                //! Kaspa RPC messages
-                pub use kaspa_rpc_core::model::message::*;
+                //! Bascoin RPC messages
+                pub use bascoin_rpc_core::model::message::*;
             }
-            pub use kaspa_rpc_core::api::rpc::RpcApi;
-            pub use kaspa_rpc_core::wasm::message::*;
+            pub use bascoin_rpc_core::api::rpc::RpcApi;
+            pub use bascoin_rpc_core::wasm::message::*;
 
-            pub use kaspa_wrpc_wasm::client::*;
-            pub use kaspa_wrpc_wasm::resolver::*;
-            pub use kaspa_wrpc_wasm::notify::*;
+            pub use bascoin_wrpc_wasm::client::*;
+            pub use bascoin_wrpc_wasm::resolver::*;
+            pub use bascoin_wrpc_wasm::notify::*;
         }
 
-        pub use kaspa_consensus_wasm::*;
-        pub use kaspa_wallet_core::wasm::*;
-        pub use kaspa_wallet_keys::prelude::*;
-        pub use kaspa_bip32::wasm::*;
+        pub use bascoin_consensus_wasm::*;
+        pub use bascoin_wallet_core::wasm::*;
+        pub use bascoin_wallet_keys::prelude::*;
+        pub use bascoin_bip32::wasm::*;
 
     } else if #[cfg(feature = "wasm32-core")] {
 
-        pub use kaspa_addresses::{Address, Version as AddressVersion};
-        pub use kaspa_consensus_core::tx::{ScriptPublicKey, Transaction, TransactionInput, TransactionOutpoint, TransactionOutput};
-        pub use kaspa_pow::wasm::*;
-        pub use kaspa_txscript::wasm::*;
+        pub use bascoin_addresses::{Address, Version as AddressVersion};
+        pub use bascoin_consensus_core::tx::{ScriptPublicKey, Transaction, TransactionInput, TransactionOutpoint, TransactionOutput};
+        pub use bascoin_pow::wasm::*;
+        pub use bascoin_txscript::wasm::*;
 
         pub mod rpc {
-            //! Kaspa RPC interface
+            //! Bascoin RPC interface
             //!
 
             pub mod messages {
-                //! Kaspa RPC messages
-                pub use kaspa_rpc_core::model::message::*;
+                //! Bascoin RPC messages
+                pub use bascoin_rpc_core::model::message::*;
             }
-            pub use kaspa_rpc_core::api::rpc::RpcApi;
-            pub use kaspa_rpc_core::wasm::message::*;
+            pub use bascoin_rpc_core::api::rpc::RpcApi;
+            pub use bascoin_rpc_core::wasm::message::*;
 
-            pub use kaspa_wrpc_wasm::client::*;
-            pub use kaspa_wrpc_wasm::resolver::*;
-            pub use kaspa_wrpc_wasm::notify::*;
+            pub use bascoin_wrpc_wasm::client::*;
+            pub use bascoin_wrpc_wasm::resolver::*;
+            pub use bascoin_wrpc_wasm::notify::*;
         }
 
-        pub use kaspa_consensus_wasm::*;
-        pub use kaspa_wallet_keys::prelude::*;
-        pub use kaspa_wallet_core::wasm::*;
-        pub use kaspa_bip32::wasm::*;
+        pub use bascoin_consensus_wasm::*;
+        pub use bascoin_wallet_keys::prelude::*;
+        pub use bascoin_wallet_core::wasm::*;
+        pub use bascoin_bip32::wasm::*;
 
     } else if #[cfg(feature = "wasm32-rpc")] {
 
-        pub use kaspa_rpc_core::api::rpc::RpcApi;
-        pub use kaspa_rpc_core::wasm::message::*;
-        pub use kaspa_rpc_core::wasm::message::IPingRequest;
-        pub use kaspa_wrpc_wasm::client::*;
-        pub use kaspa_wrpc_wasm::resolver::*;
-        pub use kaspa_wrpc_wasm::notify::*;
-        pub use kaspa_wasm_core::types::*;
+        pub use bascoin_rpc_core::api::rpc::RpcApi;
+        pub use bascoin_rpc_core::wasm::message::*;
+        pub use bascoin_rpc_core::wasm::message::IPingRequest;
+        pub use bascoin_wrpc_wasm::client::*;
+        pub use bascoin_wrpc_wasm::resolver::*;
+        pub use bascoin_wrpc_wasm::notify::*;
+        pub use bascoin_wasm_core::types::*;
 
     } else if #[cfg(feature = "wasm32-keygen")] {
 
-        pub use kaspa_addresses::{Address, Version as AddressVersion};
-        pub use kaspa_wallet_keys::prelude::*;
-        pub use kaspa_wasm_core::types::*;
-        pub use kaspa_bip32::wasm::*;
+        pub use bascoin_addresses::{Address, Version as AddressVersion};
+        pub use bascoin_wallet_keys::prelude::*;
+        pub use bascoin_wasm_core::types::*;
+        pub use bascoin_bip32::wasm::*;
 
     }
 }

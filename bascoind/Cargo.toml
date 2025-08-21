@@ -1,0 +1,76 @@
+[package]
+name = "bascoind"
+description = "Bascoin full node daemon"
+keywords = ["bascoin", "blockdag"]
+rust-version.workspace = true
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+include.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "bascoind_lib"
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+bascoin-alloc.workspace = true # This changes the global allocator for all of the next dependencies so should be kept first
+
+bascoin-addresses.workspace = true
+bascoin-addressmanager.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-notify.workspace = true
+bascoin-consensus.workspace = true
+bascoin-consensusmanager.workspace = true
+bascoin-core.workspace = true
+bascoin-database.workspace = true
+bascoin-grpc-server.workspace = true
+bascoin-hashes.workspace = true
+bascoin-index-processor.workspace = true
+bascoin-mining.workspace = true
+bascoin-notify.workspace = true
+bascoin-p2p-flows.workspace = true
+bascoin-p2p-lib.workspace = true
+bascoin-p2p-mining.workspace = true
+bascoin-txscript-errors = { path = "../crypto/txscript/errors" }
+bascoin-rpc-core.workspace = true
+bascoin-rpc-service.workspace = true
+bascoin-txscript.workspace = true
+bascoin-utils.workspace = true
+bascoin-utils-tower.workspace = true
+bascoin-utxoindex.workspace = true
+bascoin-wrpc-server.workspace = true
+
+async-channel.workspace = true
+cfg-if.workspace = true
+clap.workspace = true
+dhat = { workspace = true, optional = true }
+dirs.workspace = true
+futures-util.workspace = true
+itertools.workspace = true
+log.workspace = true
+num_cpus.workspace = true
+rand.workspace = true
+rayon.workspace = true
+rocksdb.workspace = true
+serde.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["rt", "macros", "rt-multi-thread"] }
+workflow-log.workspace = true
+
+toml = "0.8.10"
+serde_with = "3.7.0"
+
+[features]
+heap = ["dhat", "bascoin-alloc/heap"]
+devnet-prealloc = ["bascoin-consensus/devnet-prealloc"]
+semaphore-trace = ["bascoin-utils/semaphore-trace"]
+
+[lints]
+workspace = true
+
+[build-dependencies]
+prost-build = { workspace = true }
+tonic-build = { workspace = true }

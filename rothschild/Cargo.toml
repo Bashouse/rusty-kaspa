@@ -1,6 +1,6 @@
 [package]
 name = "rothschild"
-description = "Kaspa Transaction Generator"
+description = "Bascoin Transaction Generator"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,14 +10,14 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-addresses.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-core.workspace = true
-kaspa-grpc-client.workspace = true
-kaspa-notify.workspace = true
-kaspa-rpc-core.workspace = true
-kaspa-txscript.workspace = true
-kaspa-utils.workspace = true
+bascoin-addresses.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-core.workspace = true
+bascoin-grpc-client.workspace = true
+bascoin-notify.workspace = true
+bascoin-rpc-core.workspace = true
+bascoin-txscript.workspace = true
+bascoin-utils.workspace = true
 
 async-channel.workspace = true
 clap.workspace = true

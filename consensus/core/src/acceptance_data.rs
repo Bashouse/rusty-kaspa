@@ -1,4 +1,4 @@
-use kaspa_hashes::Hash;
+use bascoin_hashes::Hash;
 use serde::{Deserialize, Serialize};
 
 use crate::tx::TransactionId;

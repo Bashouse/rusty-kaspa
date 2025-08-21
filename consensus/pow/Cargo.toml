@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-pow"
-description = "Kaspa proof-of-work"
+name = "bascoin-pow"
+description = "Bascoin proof-of-work"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -14,11 +14,11 @@ wasm32-sdk = []
 
 [dependencies]
 js-sys.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-client.workspace = true
-kaspa-hashes.workspace = true
-kaspa-math.workspace = true
-kaspa-utils.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-client.workspace = true
+bascoin-hashes.workspace = true
+bascoin-math.workspace = true
+bascoin-utils.workspace = true
 wasm-bindgen.workspace = true
 workflow-wasm.workspace = true
 num.workspace = true

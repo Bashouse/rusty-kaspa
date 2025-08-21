@@ -1,4 +1,6 @@
-use kaspa_hashes::{Hash, HasherBase, MerkleBranchHash, ZERO_HASH};
+use bascoin_hashes::{Hash, Hasher, HasherBase, MerkleBranchHash, ZERO_HASH};
+use borsh::{BorshDeserialize, BorshSerialize};
+use serde::{Deserialize, Serialize};
 
 pub fn calc_merkle_root(hashes: impl ExactSizeIterator<Item = Hash>) -> Hash {
     if hashes.len() == 0 {
@@ -26,4 +28,29 @@ pub fn merkle_hash(left: Hash, right: Hash) -> Hash {
     let mut hasher = MerkleBranchHash::new();
     hasher.update(left).update(right);
     hasher.finalize()
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, BorshSerialize, BorshDeserialize)]
+pub struct MerkleProof {
+    pub hashes: Vec<Hash>,
+    pub flags: Vec<bool>,
+}
+
+impl MerkleProof {
+    pub fn new(hashes: Vec<Hash>, flags: Vec<bool>) -> Self {
+        Self { hashes, flags }
+    }
+
+    pub fn apply(&self, mut hash: Hash) -> Hash {
+        for (hash_to_combine, flag) in self.hashes.iter().zip(self.flags.iter()) {
+            hash = if *flag {
+                // The hash to combine is on the right
+                MerkleBranchHash::hash(&[hash.as_bytes(), hash_to_combine.as_bytes()].concat())
+            } else {
+                // The hash to combine is on the left
+                MerkleBranchHash::hash(&[hash_to_combine.as_bytes(), hash.as_bytes()].concat())
+            };
+        }
+        hash
+    }
 }

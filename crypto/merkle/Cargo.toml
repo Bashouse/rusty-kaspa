@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-merkle"
-description = "Kaspa merkle tree library"
+name = "bascoin-merkle"
+description = "Bascoin Merkle proofs"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,7 +10,12 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-hashes.workspace = true
+bascoin-hashes.workspace = true
+borsh.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+rand.workspace = true
 
 [lints]
 workspace = true

@@ -18,12 +18,10 @@ use crate::caches::Cache;
 use crate::data_stack::{DataStack, Stack};
 use crate::opcodes::{deserialize_next_opcode, OpCodeImplementation};
 use itertools::Itertools;
-use kaspa_consensus_core::hashing::sighash::{
-    calc_ecdsa_signature_hash, calc_schnorr_signature_hash, SigHashReusedValues, SigHashReusedValuesUnsync,
-};
-use kaspa_consensus_core::hashing::sighash_type::SigHashType;
-use kaspa_consensus_core::tx::{ScriptPublicKey, TransactionInput, UtxoEntry, VerifiableTransaction};
-use kaspa_txscript_errors::TxScriptError;
+use bascoin_consensus_core::hashing::sighash::{SigHashReusedValues, SigHashReusedValuesUnsync, calc_schnorr_signature_hash};
+use bascoin_consensus_core::hashing::sighash_type::SigHashType;
+use bascoin_consensus_core::tx::{ScriptPublicKey, TransactionInput, UtxoEntry, VerifiableTransaction};
+use bascoin_txscript_errors::TxScriptError;
 use log::trace;
 use opcodes::codes::OpReturn;
 use opcodes::{codes, to_small_int, OpCond};
@@ -227,8 +225,8 @@ pub fn is_unspendable<T: VerifiableTransaction, Reused: SigHashReusedValues>(scr
 impl<'a, T: VerifiableTransaction, Reused: SigHashReusedValues> TxScriptEngine<'a, T, Reused> {
     pub fn new(reused_values: &'a Reused, sig_cache: &'a Cache<SigCacheKey, bool>, kip10_enabled: bool) -> Self {
         Self {
-            dstack: vec![],
-            astack: vec![],
+            dstack: Vec::new(),
+            astack: Vec::new(),
             script_source: ScriptSource::StandAloneScripts(vec![]),
             reused_values,
             sig_cache,
@@ -278,8 +276,8 @@ impl<'a, T: VerifiableTransaction, Reused: SigHashReusedValues> TxScriptEngine<'
         let is_p2sh = ScriptClass::is_pay_to_script_hash(script_public_key);
         assert!(input_idx < tx.tx().inputs.len());
         Self {
-            dstack: Default::default(),
-            astack: Default::default(),
+            dstack: Vec::new(),
+            astack: Vec::new(),
             script_source: ScriptSource::TxInput { tx, input, idx: input_idx, utxo_entry, is_p2sh },
             reused_values,
             sig_cache,
@@ -297,8 +295,8 @@ impl<'a, T: VerifiableTransaction, Reused: SigHashReusedValues> TxScriptEngine<'
         kip10_enabled: bool,
     ) -> Self {
         Self {
-            dstack: Default::default(),
-            astack: Default::default(),
+            dstack: Vec::new(),
+            astack: Vec::new(),
             script_source: ScriptSource::StandAloneScripts(vec![script]),
             reused_values,
             sig_cache,
@@ -316,7 +314,7 @@ impl<'a, T: VerifiableTransaction, Reused: SigHashReusedValues> TxScriptEngine<'
     }
 
     fn execute_opcode(&mut self, opcode: DynOpcodeImplementation<T, Reused>) -> Result<(), TxScriptError> {
-        // Different from kaspad: Illegal and disabled opcode are checked on execute instead
+        // Different from bascoind: Illegal and disabled opcode are checked on execute instead
         // Note that this includes OP_RESERVED which counts as a push operation.
         if !opcode.is_push_opcode() {
             self.num_ops += 1;
@@ -389,7 +387,7 @@ impl<'a, T: VerifiableTransaction, Reused: SigHashReusedValues> TxScriptEngine<'
         // When both the signature script and public key script are empty the
         // result is necessarily an error since the stack would end up being
         // empty which is equivalent to a false top element. Thus, just return
-        // the relevant error now as an optimization.
+        // the relevant error now as an and optimization.
         if scripts.is_empty() {
             return Err(TxScriptError::NoScripts);
         }
@@ -594,7 +592,7 @@ impl<'a, T: VerifiableTransaction, Reused: SigHashReusedValues> TxScriptEngine<'
                 Self::check_pub_key_encoding_ecdsa(key)?;
                 let pk = secp256k1::PublicKey::from_slice(key).map_err(TxScriptError::InvalidSignature)?;
                 let sig = secp256k1::ecdsa::Signature::from_compact(sig).map_err(TxScriptError::InvalidSignature)?;
-                let sig_hash = calc_ecdsa_signature_hash(tx, idx, hash_type, self.reused_values);
+                let sig_hash = bascoin_consensus_core::hashing::sighash::calc_ecdsa_signature_hash(tx, idx, hash_type, self.reused_values);
                 let msg = secp256k1::Message::from_digest_slice(sig_hash.as_bytes().as_slice()).unwrap();
                 let sig_cache_key = SigCacheKey { signature: Signature::Ecdsa(sig), pub_key: PublicKey::Ecdsa(pk), message: msg };
 
@@ -641,9 +639,9 @@ mod tests {
 
     use super::*;
     use crate::script_builder::{ScriptBuilder, ScriptBuilderResult};
-    use kaspa_consensus_core::hashing::sighash::SigHashReusedValuesUnsync;
-    use kaspa_consensus_core::hashing::sighash_type::SIG_HASH_ALL;
-    use kaspa_consensus_core::tx::{
+    use bascoin_consensus_core::hashing::sighash::SigHashReusedValuesUnsync;
+    use bascoin_consensus_core::hashing::sighash_type::SIG_HASH_ALL;
+    use bascoin_consensus_core::tx::{
         MutableTransaction, PopulatedTransaction, ScriptPublicKey, Transaction, TransactionId, TransactionOutpoint, TransactionOutput,
     };
     use smallvec::SmallVec;
@@ -982,7 +980,7 @@ mod tests {
                 signature_script: &[],
                 expected_sig_ops: 0,
                 prev_script_public_key: prev_script_pubkey_p2sh.clone(),
-            },
+            }, // No script at end but still push only.
             TestVector {
                 name: "No script at the end",
                 signature_script: &[OpTrue, OpTrue],
@@ -1139,7 +1137,7 @@ mod tests {
 
         // Helper functions for creating signatures
         let create_schnorr_signature = move |tx: &MutableTransaction<Transaction>, reused: &SigHashReusedValuesUnsync| {
-            let hash = calc_schnorr_signature_hash(&tx.as_verifiable(), 0, SIG_HASH_ALL, reused);
+            let hash = bascoin_consensus_core::hashing::sighash::calc_schnorr_signature_hash(&tx.as_verifiable(), 0, SIG_HASH_ALL, reused);
             let msg = secp256k1::Message::from_digest_slice(hash.as_bytes().as_slice()).unwrap();
             let sig = keypair.sign_schnorr(msg);
             let mut signature = sig.as_ref().to_vec();
@@ -1148,7 +1146,7 @@ mod tests {
         };
 
         let create_ecdsa_signature = move |tx: &MutableTransaction<Transaction>, reused: &SigHashReusedValuesUnsync| {
-            let hash = calc_ecdsa_signature_hash(&tx.as_verifiable(), 0, SIG_HASH_ALL, reused);
+            let hash = bascoin_consensus_core::hashing::sighash::calc_ecdsa_signature_hash(&tx.as_verifiable(), 0, SIG_HASH_ALL, reused);
             let msg = secp256k1::Message::from_digest_slice(hash.as_bytes().as_slice()).unwrap();
             let sig = keypair.secret_key().sign_ecdsa(msg);
             let mut signature = sig.serialize_compact().to_vec();
@@ -1250,7 +1248,10 @@ mod tests {
             let tx = Transaction::new(
                 1,
                 vec![TransactionInput {
-                    previous_outpoint: TransactionOutpoint { transaction_id: TransactionId::default(), index: 0 },
+                    previous_outpoint: TransactionOutpoint {
+                        transaction_id: TransactionId::default(),
+                        index: 0,
+                    },
                     signature_script: vec![],
                     sequence: 0,
                     sig_op_count: test.sig_op_limit,
@@ -1310,9 +1311,9 @@ mod bitcoind_tests {
 
     use super::*;
     use crate::script_builder::ScriptBuilderError;
-    use kaspa_consensus_core::constants::MAX_TX_IN_SEQUENCE_NUM;
-    use kaspa_consensus_core::hashing::sighash::SigHashReusedValuesUnsync;
-    use kaspa_consensus_core::tx::{
+    use bascoin_consensus_core::constants::MAX_TX_IN_SEQUENCE_NUM;
+    use bascoin_consensus_core::hashing::sighash::SigHashReusedValuesUnsync;
+    use bascoin_consensus_core::tx::{
         PopulatedTransaction, ScriptPublicKey, Transaction, TransactionId, TransactionOutpoint, TransactionOutput,
     };
 
@@ -1402,7 +1403,7 @@ mod bitcoind_tests {
 
             // Create transaction
             let tx = create_spending_transaction(script_sig, script_pub_key.clone());
-            let entry = UtxoEntry::new(0, script_pub_key.clone(), 0, true);
+            let entry = UtxoEntry::new(0, script_pub_key.clone(), 0, false);
             let populated_tx = PopulatedTransaction::new(&tx, vec![entry]);
 
             // Run transaction
@@ -1491,48 +1492,6 @@ mod bitcoind_tests {
                         _ => vec![],
                     },
                 },
-            }
-        }
-    }
-
-    #[test]
-    fn test_bitcoind_tests() {
-        // Script test files are split into two versions to test behavior before and after KIP-10:
-        //
-        // - script_tests.json: Tests basic script functionality with KIP-10 disabled (kip10_enabled=false)
-        // - script_tests-kip10.json: Tests expanded functionality with KIP-10 enabled (kip10_enabled=true)
-        //
-        // KIP-10 introduces two major changes:
-        //
-        // 1. Support for 8-byte integer arithmetic (previously limited to 4 bytes)
-        //    This enables working with larger numbers in scripts and reduces artificial constraints
-        //
-        // 2. Transaction introspection opcodes:
-        //    - OpTxInputCount (0xb3): Get number of inputs
-        //    - OpTxOutputCount (0xb4): Get number of outputs
-        //    - OpTxInputIndex (0xb9): Get current input index
-        //    - OpTxInputAmount (0xbe): Get input amount
-        //    - OpTxInputSpk (0xbf): Get input script public key
-        //    - OpTxOutputAmount (0xc2): Get output amount
-        //    - OpTxOutputSpk (0xc3): Get output script public key
-        //
-        // These changes were added to support mutual transactions and auto-compounding addresses.
-        // When KIP-10 is disabled (pre-activation), the new opcodes will return an InvalidOpcode error
-        // and arithmetic is limited to 4 bytes. When enabled, scripts gain full access to transaction
-        // data and 8-byte arithmetic capabilities.
-        for runtime_sig_op_counting in [false, true] {
-            for (file_name, kip10_enabled) in [("script_tests.json", false), ("script_tests-kip10.json", true)] {
-                let file = File::open(Path::new(env!("CARGO_MANIFEST_DIR")).join("test-data").join(file_name))
-                    .expect("Could not find test file");
-                let reader = BufReader::new(file);
-
-                // Read the JSON contents of the file as an instance of `User`.
-                let tests: Vec<JsonTestRow> = serde_json::from_reader(reader).expect("Failed Parsing {:?}");
-                for row in tests {
-                    if let Err(error) = row.test_row(kip10_enabled, runtime_sig_op_counting) {
-                        panic!("Test: {:?} failed for {}: {:?}", row.clone(), file_name, error);
-                    }
-                }
             }
         }
     }

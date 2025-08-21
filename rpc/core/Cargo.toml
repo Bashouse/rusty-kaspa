@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-rpc-core"
-description = "Kaspa RPC core"
+name = "bascoin-rpc-core"
+description = "Bascoin RPC core"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -11,25 +11,25 @@ repository.workspace = true
 
 [features]
 wasm32-sdk = [
-    "kaspa-consensus-client/wasm32-sdk",
-    "kaspa-consensus-wasm/wasm32-sdk"
+    "bascoin-consensus-client/wasm32-sdk",
+    "bascoin-consensus-wasm/wasm32-sdk"
 ]
 
 [dependencies]
-kaspa-addresses.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-client.workspace = true
-kaspa-consensus-notify.workspace = true
-kaspa-consensus-wasm.workspace = true
-kaspa-core.workspace = true
-kaspa-hashes.workspace = true
-kaspa-index-core.workspace = true
-kaspa-math.workspace = true
-kaspa-mining-errors.workspace = true
-kaspa-notify.workspace = true
-kaspa-txscript.workspace = true
-kaspa-utils.workspace = true
-kaspa-rpc-macros.workspace = true
+bascoin-addresses.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-client.workspace = true
+bascoin-consensus-notify.workspace = true
+bascoin-consensus-wasm.workspace = true
+bascoin-core.workspace = true
+bascoin-hashes.workspace = true
+bascoin-index-core.workspace = true
+bascoin-math.workspace = true
+bascoin-mining-errors.workspace = true
+bascoin-notify.workspace = true
+bascoin-txscript.workspace = true
+bascoin-utils.workspace = true
+bascoin-rpc-macros.workspace = true
 
 async-channel.workspace = true
 async-trait.workspace = true

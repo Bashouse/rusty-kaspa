@@ -1,7 +1,7 @@
 [package]
-name = "kaspa-wallet-core"
-description = "Kaspa wallet library"
-keywords = ["kaspa", "wallet"]
+name = "bascoin-wallet-core"
+description = "Bascoin wallet library"
+keywords = ["bascoin", "wallet"]
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -13,14 +13,14 @@ repository.workspace = true
 [features]
 multi-user = []
 wasm32-keygen = [
-    # "kaspa-consensus-wasm/wasm32-types",
+    # "bascoin-consensus-wasm/wasm32-types",
 ]
 wasm32-core = [
-    "kaspa-consensus-wasm/wasm32-sdk",
-    "kaspa-consensus-core/wasm32-sdk",
-    "kaspa-wrpc-client/wasm32-sdk",
-    "kaspa-wrpc-wasm/wasm32-sdk",
-    "kaspa-wasm-core/wasm32-sdk",
+    "bascoin-consensus-wasm/wasm32-sdk",
+    "bascoin-consensus-core/wasm32-sdk",
+    "bascoin-wrpc-client/wasm32-sdk",
+    "bascoin-wrpc-wasm/wasm32-sdk",
+    "bascoin-wasm-core/wasm32-sdk",
 ]
 wasm32-sdk = [
     "wasm32-core"
@@ -56,25 +56,25 @@ heapless.workspace = true
 hmac.workspace = true
 itertools.workspace = true
 js-sys.workspace = true
-kaspa-addresses.workspace = true
-kaspa-bip32.workspace = true
-kaspa-consensus-client.workspace = true
-kaspa-consensus-core.workspace = true
-kaspa-consensus-wasm.workspace = true
-kaspa-core.workspace = true
-kaspa-hashes.workspace = true
-kaspa-metrics-core.workspace = true
-kaspa-notify.workspace = true
-kaspa-rpc-core.workspace = true
-kaspa-txscript-errors.workspace = true
-kaspa-txscript.workspace = true
-kaspa-utils.workspace = true
-kaspa-wallet-keys.workspace = true
-kaspa-wallet-macros.workspace = true
-kaspa-wallet-pskt.workspace = true
-kaspa-wasm-core.workspace = true
-kaspa-wrpc-client.workspace = true
-kaspa-wrpc-wasm.workspace = true
+bascoin-addresses.workspace = true
+bascoin-bip32.workspace = true
+bascoin-consensus-client.workspace = true
+bascoin-consensus-core.workspace = true
+bascoin-consensus-wasm.workspace = true
+bascoin-core.workspace = true
+bascoin-hashes.workspace = true
+bascoin-metrics-core.workspace = true
+bascoin-notify.workspace = true
+bascoin-rpc-core.workspace = true
+bascoin-txscript-errors.workspace = true
+bascoin-txscript.workspace = true
+bascoin-utils.workspace = true
+bascoin-wallet-keys.workspace = true
+bascoin-wallet-macros.workspace = true
+bascoin-wallet-pskt.workspace = true
+bascoin-wasm-core.workspace = true
+bascoin-wrpc-client.workspace = true
+bascoin-wrpc-wasm.workspace = true
 md-5.workspace = true
 pad.workspace = true
 pbkdf2.workspace = true

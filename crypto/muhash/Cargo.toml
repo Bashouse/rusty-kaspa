@@ -1,6 +1,6 @@
 [package]
-name = "kaspa-muhash"
-description = "Kaspa Muhash library"
+name = "bascoin-muhash"
+description = "Bascoin Multiplicative Hash library"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true
@@ -10,8 +10,10 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-kaspa-hashes.workspace = true
-kaspa-math.workspace = true
+blake2b_simd.workspace = true
+borsh.workspace = true
+bascoin-hashes.workspace = true
+bascoin-math.workspace = true
 rand_chacha.workspace = true
 serde.workspace = true
 

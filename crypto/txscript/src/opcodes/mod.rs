@@ -7,9 +7,9 @@ use crate::{
     SEQUENCE_LOCK_TIME_DISABLED, SEQUENCE_LOCK_TIME_MASK,
 };
 use blake2b_simd::Params;
-use kaspa_consensus_core::hashing::sighash::SigHashReusedValues;
-use kaspa_consensus_core::hashing::sighash_type::SigHashType;
-use kaspa_consensus_core::tx::VerifiableTransaction;
+use bascoin_consensus_core::hashing::sighash::SigHashReusedValues;
+use bascoin_consensus_core::hashing::sighash_type::SigHashType;
+use bascoin_consensus_core::tx::VerifiableTransaction;
 use sha2::{Digest, Sha256};
 use std::{
     fmt::{Debug, Formatter},
@@ -1078,10 +1078,10 @@ mod test {
     use crate::opcodes::{OpCodeExecution, OpCodeImplementation};
     use crate::{opcodes, pay_to_address_script, TxScriptEngine, TxScriptError, LOCK_TIME_THRESHOLD};
     use kaspa_addresses::{Address, Prefix, Version};
-    use kaspa_consensus_core::constants::{SOMPI_PER_KASPA, TX_VERSION};
-    use kaspa_consensus_core::hashing::sighash::SigHashReusedValuesUnsync;
-    use kaspa_consensus_core::subnets::SUBNETWORK_ID_NATIVE;
-    use kaspa_consensus_core::tx::{
+    use bascoin_consensus_core::constants::{SOMPI_PER_KASPA, TX_VERSION};
+    use bascoin_consensus_core::hashing::sighash::SigHashReusedValuesUnsync;
+    use bascoin_consensus_core::subnets::SUBNETWORK_ID_NATIVE;
+    use bascoin_consensus_core::tx::{
         PopulatedTransaction, ScriptPublicKey, Transaction, TransactionInput, TransactionOutpoint, TransactionOutput, UtxoEntry,
         VerifiableTransaction,
     };
@@ -2722,7 +2722,7 @@ mod test {
         run_error_test_cases(vec![
             ErrorTestCase {
                 code: opcodes::OpWithin::empty().expect("Should accept empty"),
-                init: vec![vec![], vec![]],
+                init: vec![vec![]],
                 error: TxScriptError::InvalidStackOperation(3, 2),
             },
             ErrorTestCase {
@@ -2814,7 +2814,7 @@ mod test {
     }
 
     fn make_mock_transaction(lock_time: u64) -> (VerifiableTransactionMock, TransactionInput, UtxoEntry) {
-        let dummy_prev_out = TransactionOutpoint::new(kaspa_hashes::Hash::from_u64_word(1), 1);
+        let dummy_prev_out = TransactionOutpoint::new(bascoin_hashes::Hash::from_u64_word(1), 1);
         let dummy_sig_script = vec![0u8; 65];
         let dummy_tx_input = TransactionInput::new(dummy_prev_out, dummy_sig_script, 10, 1);
         let addr_hash = vec![1u8; 32];
@@ -3008,7 +3008,7 @@ mod test {
             script_builder::ScriptBuilder,
             SpkEncoding,
         };
-        use kaspa_consensus_core::tx::MutableTransaction;
+        use bascoin_consensus_core::tx::MutableTransaction;
 
         #[derive(Clone, Debug)]
         struct Kip10Mock {
@@ -3023,7 +3023,7 @@ mod test {
         }
 
         fn kip_10_tx_mock(inputs: Vec<Kip10Mock>, outputs: Vec<Kip10Mock>) -> (Transaction, Vec<UtxoEntry>) {
-            let dummy_prev_out = TransactionOutpoint::new(kaspa_hashes::Hash::from_u64_word(1), 1);
+            let dummy_prev_out = TransactionOutpoint::new(bascoin_hashes::Hash::from_u64_word(1), 1);
             let dummy_sig_script = vec![0u8; 65];
             let (utxos, tx_inputs) = inputs
                 .into_iter()
@@ -3304,7 +3304,7 @@ mod test {
             }
         }
         fn create_mock_tx(input_count: usize, output_count: usize) -> (Transaction, Vec<UtxoEntry>) {
-            let dummy_prev_out = TransactionOutpoint::new(kaspa_hashes::Hash::from_u64_word(1), 1);
+            let dummy_prev_out = TransactionOutpoint::new(bascoin_hashes::Hash::from_u64_word(1), 1);
             let dummy_sig_script = vec![0u8; 65];
 
             // Create inputs with different SPKs and amounts
